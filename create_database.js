@@ -47,6 +47,19 @@ async function seedData(client) {
   }
 }
 
+// Função para adicionar um usuário de teste
+async function seedUser(client) {
+  try {
+    await client.query(`
+      INSERT INTO usuarios (email, senha)
+      VALUES ('teste@teste.com', '123456');
+    `);
+    console.log('Usuário de teste adicionado com sucesso!');
+  } catch (error) {
+    console.error('Erro ao adicionar usuário de teste:', error);
+  }
+}
+
 // Função principal
 async function main() {
   const client = new Client(dbConfig);
@@ -55,6 +68,7 @@ async function main() {
   try {
     await createSchema(client);
     await seedData(client);
+    await seedUser(client);
   } finally {
     await client.end();
   }
