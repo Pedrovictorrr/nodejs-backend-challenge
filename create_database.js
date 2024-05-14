@@ -22,6 +22,11 @@ async function createSchema(client) {
         body TEXT NOT NULL,
         tags TEXT[] DEFAULT '{}'
       );
+      CREATE TABLE IF NOT EXISTS usuarios (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        email TEXT UNIQUE NOT NULL,
+        senha TEXT NOT NULL
+      );
     `);
     console.log('Esquema e tabelas criados com sucesso!');
   } catch (error) {
