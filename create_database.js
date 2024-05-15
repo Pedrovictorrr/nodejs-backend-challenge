@@ -1,17 +1,18 @@
-const { Client } = require('pg');
+const { Client } = require("pg");
+const bcrypt = require('bcrypt');
 
 // Configurações do banco de dados
 const dbConfig = {
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres',
-  password: '',
+  user: "postgres",
+  host: "localhost",
+  database: "postgres",
+  password: "",
   port: 5432, // Porta padrão do PostgreSQL
 };
 
 // Função para criar o esquema e as tabelas
 async function createSchema(client) {
-  try {  
+  try {
     await client.query(`
       CREATE SCHEMA IF NOT EXISTS node_teste;
       SET search_path TO node_teste;
@@ -24,13 +25,14 @@ async function createSchema(client) {
       );
       CREATE TABLE IF NOT EXISTS usuarios (
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-        email TEXT UNIQUE NOT NULL,
-        senha TEXT NOT NULL
+        email TEXT UNIQUE NOT NULL, 
+        senha TEXT NOT NULL,
+        token TEXT
       );
     `);
-    console.log('Esquema e tabelas criados com sucesso!');
+    console.log("Esquema e tabelas criados com sucesso!");
   } catch (error) {
-    console.error('Erro ao criar esquema e tabelas:', error);
+    console.error("Erro ao criar esquema e tabelas:", error);
   }
 }
 
@@ -41,22 +43,25 @@ async function seedData(client) {
       INSERT INTO posts (title, body, tags)
       VALUES ('Título do Post', 'Corpo do post aqui', '{"tag1", "tag2"}');
     `);
-    console.log('Seed de dados adicionado com sucesso!');
+    console.log("Seed de dados adicionado com sucesso!");
   } catch (error) {
-    console.error('Erro ao adicionar seed de dados:', error);
+    console.error("Erro ao adicionar seed de dados:", error);
   }
 }
 
 // Função para adicionar um usuário de teste
 async function seedUser(client) {
   try {
+    const password = '123456';
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     await client.query(`
       INSERT INTO usuarios (email, senha)
-      VALUES ('teste@teste.com', '123456');
+      VALUES ('teste@teste.com', '${hashedPassword}');
     `);
-    console.log('Usuário de teste adicionado com sucesso!');
+    console.log("Usuário de teste adicionado com sucesso!");
   } catch (error) {
-    console.error('Erro ao adicionar usuário de teste:', error);
+    console.error("Erro ao adicionar usuário de teste:", error);
   }
 }
 

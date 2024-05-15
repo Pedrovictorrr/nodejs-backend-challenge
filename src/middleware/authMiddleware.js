@@ -1,4 +1,3 @@
-// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 
 function authMiddleware(req, res, next) {
@@ -8,14 +7,15 @@ function authMiddleware(req, res, next) {
     return res.status(401).json({ message: 'Token not provided' });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: 'Invalid token' });
-    }
-
+  try {
+    console.log(token);
+    const decoded = jwt.verify(token, 'seuSegredo'); // Use a mesma chave secreta usada para assinar o token
+    console.log(decoded);
     req.userId = decoded.id;
     next();
-  });
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
 }
 
 module.exports = authMiddleware;

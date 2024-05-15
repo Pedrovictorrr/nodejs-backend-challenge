@@ -4,7 +4,6 @@ const router = express.Router();
 const postController = require('../controllers/postController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-
 router.use(authMiddleware);
 
 // Retorna todos os posts
