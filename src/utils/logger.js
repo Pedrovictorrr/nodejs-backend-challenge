@@ -1,7 +1,7 @@
 // utils/logger.js
 const fs = require('fs');
 
-const logFilePath = './logs/error.log';
+const logFilePath = '../../logs/error.log';
 
 const logger = {
   error: (error) => {
