@@ -1,96 +1,79 @@
 
-# Teste para Desenvolvedor Node.js
+# API Node.js com PostgreSQL
 
-Este é um projeto de teste para desenvolvedor Node.js, que inclui uma API com Swagger, rotas CRUD para `/posts` e uma rota de autenticação `/auth`.
+Esta é uma API Node.js que utiliza PostgreSQL como banco de dados.
 
-## Requisitos
+## Pré-requisitos
 
-- Node.js (v14 ou superior)
-- npm ou Yarn
-- PostgreSQL
+- Node.js v14 ou superior instalado na sua máquina
+- Banco de dados PostgreSQL instalado localmente
+- Arquivo `.env` configurado (veja abaixo)
+- Pacotes Node.js instalados (veja abaixo)
 
 ## Instalação
 
 1. Clone o repositório:
 
-```bash
-git clone https://github.com/seu-usuario/seu-projeto.git
+```
+git clone https://github.com/seu_usuario/seu_repositorio.git
 ```
 
 2. Acesse o diretório do projeto:
 
-```bash
-cd seu-projeto
+```
+cd seu_repositorio
 ```
 
 3. Instale as dependências:
 
-```bash
+```
 npm install
-# ou
-yarn
 ```
 
-## Configuração do Banco de Dados
+## Configuração do arquivo .env
 
-1. Certifique-se de que o PostgreSQL está instalado e em execução em sua máquina.
-2. Abra o arquivo `config.js` localizado na raiz do projeto.
-3. Configure as informações do banco de dados de acordo com a sua instalação do PostgreSQL:
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
-```javascript
-const { Client } = require('pg');
-
-// Configurações do banco de dados
-const dbConfig = {
-  user: 'seu-usuario', // Nome de usuário do PostgreSQL
-  host: 'localhost',    // Host do PostgreSQL
-  database: 'nome-do-banco-de-dados', // Nome do banco de dados
-  password: 'sua-senha', // Senha do PostgreSQL
-  port: 5432,           // Porta do PostgreSQL (por padrão é 5432)
-};
-
-const client = new Client(dbConfig);
-client.connect();
-
-module.exports = {
-  query: (text, params) => client.query(text, params),
-};
+```
+DB_USER=seu_usuario
+DB_PASSWORD=sua_senha
+SECRET_KEY=chave_secreta_para_jwt
 ```
 
-## Executando a aplicação
+Substitua `seu_usuario`, `sua_senha`  pelas informações do seu banco de dados PostgreSQL. 
 
-1. Execute o seguinte comando para criar o banco de dados:
+## Configuração do banco de dados
 
-```bash
+Execute o seguinte comando para criar o banco de dados e popular com dados de exemplo:
+
+```
 node create_database.js
 ```
 
-2. Em seguida, execute o seguinte comando para iniciar o servidor:
+## Executando os testes
 
-```bash
-node app.js
+Para executar os testes, utilize o seguinte comando:
+
+```
+npm test
 ```
 
-3. Acesse a documentação da API em [http://localhost:3000/api-docs](http://localhost:3000/api-docs) para visualizar e testar as rotas.
+## Iniciando a API
 
-## Rotas
+Para iniciar a API, utilize o seguinte comando:
 
-### Posts
+```
+npm start
+```
 
-- `GET /posts`: Retorna todos os posts.
-- `GET /posts/:id`: Retorna um post específico pelo ID.
-- `POST /posts`: Cria um novo post.
-- `PUT /posts/:id`: Atualiza um post existente.
-- `DELETE /posts/:id`: Deleta um post existente.
+## Documentação da API
 
-### Autenticação
+A documentação da API está disponível na rota `/api-docs`. Você pode acessá-la através do seu navegador:
 
-- `POST /auth/login`: Rota para autenticação de usuário. Retorna um token JWT válido.
+```
+http://localhost:3000/api-docs
+```
 
-## Contribuindo
+## Autenticação
 
-Sinta-se à vontade para contribuir com este projeto! Abra uma issue ou envie um pull request.
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter mais detalhes.
+Para acessar as rotas protegidas, como `/posts`, você precisa autenticar antes. Utilize a rota `/auth/login` para fazer login e obter um token de autenticação. Envie o token obtido nas requisições para as rotas protegidas.
