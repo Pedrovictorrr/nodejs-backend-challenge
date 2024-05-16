@@ -1,16 +1,15 @@
 const { Client } = require("pg");
 const bcrypt = require('bcrypt');
 
-// Configurações do banco de dados
+
 const dbConfig = {
   user: "postgres",
   host: "localhost",
   database: "postgres",
   password: "",
-  port: 5432, // Porta padrão do PostgreSQL
+  port: 5432, 
 };
 
-// Função para criar o esquema e as tabelas
 async function createSchema(client) {
   try {
     await client.query(`
@@ -36,7 +35,6 @@ async function createSchema(client) {
   }
 }
 
-// Função para adicionar um seed de post
 async function seedData(client) {
   try {
     await client.query(`
@@ -49,7 +47,6 @@ async function seedData(client) {
   }
 }
 
-// Função para adicionar um usuário de teste
 async function seedUser(client) {
   try {
     const password = '123456';
@@ -65,7 +62,6 @@ async function seedUser(client) {
   }
 }
 
-// Função principal
 async function main() {
   const client = new Client(dbConfig);
   await client.connect();
@@ -79,5 +75,4 @@ async function main() {
   }
 }
 
-// Chamada da função principal
 main();

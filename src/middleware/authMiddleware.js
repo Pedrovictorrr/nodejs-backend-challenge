@@ -1,4 +1,3 @@
-// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -12,7 +11,7 @@ function authMiddleware(req, res, next) {
   const tokenWithoutBearer = token.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(tokenWithoutBearer, process.env.SECRET_KEY); // Use a mesma chave secreta usada para assinar o token
+    const decoded = jwt.verify(tokenWithoutBearer, process.env.SECRET_KEY); 
     req.userId = decoded.id;
     next();
   } catch (error) {

@@ -1,8 +1,7 @@
-// controllers/postController.js
 const Post = require('../models/postModel');
 const logger = require('../utils/logger');
 
-// Retorna todos os posts
+
 exports.getAllPosts = async (req, res) => {
   try {
     const posts = await Post.getAllPosts();
@@ -13,7 +12,7 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
-// Cria um novo post
+
 exports.createPost = async (req, res) => {
   const { title, body, tags } = req.body;
 
@@ -40,7 +39,7 @@ exports.getPostById = async (req, res) => {
   }
 };
 
-// Atualiza um post pelo ID
+
 exports.updatePost = async (req, res) => {
   const { title, body, tags } = req.body;
 
@@ -56,7 +55,7 @@ exports.updatePost = async (req, res) => {
   }
 };
 
-// Deleta um post pelo ID
+
 exports.deletePost = async (req, res) => {
   try {
     await Post.deletePost(req.params.id);

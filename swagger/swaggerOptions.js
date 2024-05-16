@@ -1,5 +1,3 @@
-// swagger/swaggerOptions.js
-
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
@@ -15,7 +13,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ['./swagger/*.js'], // Caminho para os arquivos de rota da sua aplicação
+  apis: ['./swagger/*.js'], 
 };
 
 module.exports = swaggerOptions;

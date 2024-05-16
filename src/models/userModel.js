@@ -27,7 +27,6 @@ class User {
   static async create({ email, password }) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ email, password: hashedPassword });
-    // Salvar usuário no banco de dados
     return user;
   }
 

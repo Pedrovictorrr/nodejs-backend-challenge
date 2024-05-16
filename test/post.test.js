@@ -5,7 +5,7 @@ const app = require('../app');
 require('dotenv').config();
 
 describe('Testando rotas da aplicação', () => {
-  // Token válido para os testes
+
   const token = jwt.sign({ userId: 'user123' }, process.env.SECRET_KEY);
 
   
@@ -37,7 +37,7 @@ describe('Testando rotas da aplicação', () => {
   it('Deve retornar status 401 ao acessar a rota /posts com token de autenticação inválido', async () => {
     const response = await request(app)
       .get('/posts')
-      .set('Authorization', `Bearer ${token}`); // Adicionando token válido
+      .set('Authorization', `Bearer ${token}`); 
     expect(response.statusCode).toBe(200);
   });
 });
