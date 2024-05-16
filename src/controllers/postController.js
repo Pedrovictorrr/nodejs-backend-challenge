@@ -1,10 +1,12 @@
 // controllers/postController.js
 const Post = require('../models/postModel');
 
-// Retorna todos os posts
+// Retorna todos os posts com paginação
 exports.getAllPosts = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+
   try {
-    const posts = await Post.getAllPosts();
+    const posts = await Post.getAllPosts(page, limit);
     res.json(posts);
   } catch (err) {
     res.status(500).json({ message: err.message });

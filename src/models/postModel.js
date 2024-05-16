@@ -1,43 +1,81 @@
+// models/postModel.js
 const db = require('../../config');
 
-// Retorna todos os posts
-const getAllPosts = async () => {
-  try {
-    console.log('entrou')
-    const { rows } = await db.query('SELECT * FROM node_teste.posts');
-    return rows;
-  } catch (err) {
-    throw new Error(err.message);
+class Post {
+  // Retorna todos os posts com paginação
+  static async getAllPosts(page, limit) {
+    const offset = (page - 1) * limit;
+    const query = {
+      text: 'SELECT * FROM posts LIMIT $1 OFFSET $2',
+      values: [limit, offset],
+    };
+
+    try {
+      const { rows } = await db.query(query);
+      return rows;
+    } catch (error) {
+      throw new Error('Unable to retrieve posts');
+    }
   }
-};
 
-// Cria um novo post
-const createPost = async ( title, body, tags) => {
-  const { rows } = await db.query(
-    'INSERT INTO node_teste.posts ( title, body, tags) VALUES ($1, $2, $3) RETURNING *',
-    [ title, body, tags]
-  );
-  return rows[0];
-};
+  // Cria um novo post
+  static async createPost(title, body, tags) {
+    const query = {
+      text: 'INSERT INTO posts (title, body, tags) VALUES ($1, $2, $3) RETURNING *',
+      values: [title, body, tags],
+    };
 
-// Retorna um post pelo ID
-const getPostById = async (id) => {
-  const { rows } = await db.query('SELECT * FROM node_teste.posts WHERE id = $1', [id]);
-  return rows[0];
-};
+    try {
+      const { rows } = await db.query(query);
+      return rows[0];
+    } catch (error) {
+      throw new Error('Unable to create post');
+    }
+  }
 
-// Atualiza um post pelo ID
-const updatePost = async (id, title, body, tags) => {
-  const { rows } = await db.query(
-    'UPDATE node_teste.posts SET title = $1, body = $2, tags = $3 WHERE id = $4 RETURNING *',
-    [title, body, tags, id]
-  );
-  return rows[0];
-};
+  // Retorna um post pelo ID
+  static async getPostById(id) {
+    const query = {
+      text: 'SELECT * FROM posts WHERE id = $1',
+      values: [id],
+    };
 
-// Deleta um post pelo ID
-const deletePost = async (id) => {
-  await db.query('DELETE FROM node_teste.posts WHERE id = $1', [id]);
-};
+    try {
+      const { rows } = await db.query(query);
+      return rows[0];
+    } catch (error) {
+      throw new Error('Unable to retrieve post');
+    }
+  }
 
-module.exports = { getAllPosts, createPost, getPostById, updatePost, deletePost };
+  // Atualiza um post pelo ID
+  static async updatePost(id, title, body, tags) {
+    const query = {
+      text: 'UPDATE posts SET title = $2, body = $3, tags = $4 WHERE id = $1 RETURNING *',
+      values: [id, title, body, tags],
+    };
+
+    try {
+      const { rows } = await db.query(query);
+      return rows[0];
+    } catch (error) {
+      throw new Error('Unable to update post');
+    }
+  }
+
+  // Deleta um post pelo ID
+  static async deletePost(id) {
+    const query = {
+      text: 'DELETE FROM posts WHERE id = $1',
+      values: [id],
+    };
+
+    try {
+      await db.query(query);
+    } catch (error) {
+      throw new Error('Unable to delete post');
+    }
+  }
+}
+
+module.exports = Post;
