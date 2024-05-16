@@ -1,5 +1,6 @@
 // controllers/postController.js
 const Post = require('../models/postModel');
+const logger = require('../utils/logger');
 
 // Retorna todos os posts
 exports.getAllPosts = async (req, res) => {
@@ -7,7 +8,8 @@ exports.getAllPosts = async (req, res) => {
     const posts = await Post.getAllPosts();
     res.json(posts);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    logger.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -19,6 +21,7 @@ exports.createPost = async (req, res) => {
     const newPost = await Post.createPost(title, body, tags);
     res.status(201).json(newPost);
   } catch (err) {
+    logger.error(err);
     res.status(400).json({ message: err.message });
   }
 };
@@ -32,7 +35,8 @@ exports.getPostById = async (req, res) => {
     }
     res.json(post);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    logger.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -47,6 +51,7 @@ exports.updatePost = async (req, res) => {
     }
     res.json(updatedPost);
   } catch (err) {
+    logger.error(err);
     res.status(400).json({ message: err.message });
   }
 };
@@ -57,6 +62,7 @@ exports.deletePost = async (req, res) => {
     await Post.deletePost(req.params.id);
     res.json({ message: 'Post deleted' });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    logger.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
