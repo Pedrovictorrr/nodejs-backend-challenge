@@ -15,13 +15,13 @@ Esta é uma API Node.js que utiliza PostgreSQL como banco de dados.
 1. Clone o repositório:
 
 ```
-git clone https://github.com/seu_usuario/seu_repositorio.git
+git clone https://github.com/Pedrovictorrr/nodejs-backend-challenge.git
 ```
 
 2. Acesse o diretório do projeto:
 
 ```
-cd seu_repositorio
+cd nodejs-backend-challenge
 ```
 
 3. Instale as dependências:
