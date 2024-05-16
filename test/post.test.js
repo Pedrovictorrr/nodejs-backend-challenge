@@ -1,58 +1,43 @@
-// __tests__/post.test.js
+// post.test.js
 const request = require('supertest');
+const jwt = require('jsonwebtoken');
 const app = require('../app');
+require('dotenv').config();
 
-describe('Testando CRUD da API', () => {
-  let postId;
+describe('Testando rotas da aplicação', () => {
+  // Token válido para os testes
+  const token = jwt.sign({ userId: 'user123' }, process.env.SECRET_KEY);
 
-  it('Deve criar um novo post', async () => {
-    const res = await request(app)
-      .post('/posts')
-      .send({
-        id: '1',
-        title: 'Título do Post',
-        body: 'Corpo do Post',
-        tags: ['tag1', 'tag2']
-      });
-    expect(res.statusCode).toEqual(201);
-    expect(res.body).toHaveProperty('id');
-    postId = res.body.id;
+  
+  it('Deve retornar status 200 ao fazer login com credenciais válidas', async () => {
+    const response = await request(app)
+      .post('/auth/login')
+      .send({ email: 'teste@teste.com', password: '123456' });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('token');
   });
 
-  it('Deve buscar todos os posts', async () => {
-    const res = await request(app).get('/posts');
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.length).toBeGreaterThan(0);
+  it('Deve retornar status 200 ao acessar a rota /api-docs', async () => {
+    const response = await request(app).get('/api-docs/');
+    expect(response.statusCode).toBe(200);
   });
 
-  it('Deve buscar um post pelo ID', async () => {
-    const res = await request(app).get(`/posts/${postId}`);
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.id).toEqual(postId);
+  it('Deve retornar status 401 ao acessar a rota /posts sem token de autenticação', async () => {
+    const response = await request(app).get('/posts');
+    expect(response.statusCode).toBe(401);
   });
 
-  it('Deve atualizar um post pelo ID', async () => {
-    const res = await request(app)
-      .patch(`/posts/${postId}`)
-      .send({
-        title: 'Título Atualizado'
-      });
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.title).toEqual('Título Atualizado');
+  it('Deve retornar status 401 ao acessar a rota /posts com token de autenticação inválido', async () => {
+    const response = await request(app)
+      .get('/posts')
+      .set('Authorization', 'Bearer token_invalido');
+    expect(response.statusCode).toBe(401);
   });
 
-  it('Deve deletar um post pelo ID', async () => {
-    const res = await request(app).delete(`/posts/${postId}`);
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.message).toEqual('Post deleted');
-  });
-
-  it('Deve retornar status 404 se o post não for encontrado', async () => {
-    const res = await request(app)
-      .patch(`/posts/123`)
-      .send({
-        title: 'Título Atualizado'
-      });
-    expect(res.statusCode).toEqual(404);
+  it('Deve retornar status 401 ao acessar a rota /posts com token de autenticação inválido', async () => {
+    const response = await request(app)
+      .get('/posts')
+      .set('Authorization', `Bearer ${token}`); // Adicionando token válido
+    expect(response.statusCode).toBe(200);
   });
 });

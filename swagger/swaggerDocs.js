@@ -49,6 +49,22 @@
  *       description: Retorna uma lista de todos os posts
  *       produces:
  *         - application/json
+ *       parameters:
+ *         - in: query
+ *           name: page
+ *           description: Número da página
+ *           required: false
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         - in: query
+ *           name: limit
+ *           description: Número de resultados por página
+ *           required: false
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
  *       responses:
  *         200:
  *           description: Lista de posts

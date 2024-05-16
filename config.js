@@ -1,11 +1,11 @@
 // dbConfig.js
 const { Client } = require('pg');
-require('dotenv').config(); // Carregar variáveis de ambiente do arquivo .env
+require('dotenv').config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
 
 const dbConfig = {
   user: process.env.DB_USER,
   host: 'localhost',
-  database: 'postgres',
+  database: process.env.NODE_ENV === 'test' ? process.env.DB_DATABASE : 'postgres',
   password: process.env.DB_PASSWORD,
   port: 5432,
 };
